@@ -9,9 +9,7 @@ import App from './App';
 ReactDOM.render(
   <React.StrictMode>
       <CssBaseline />
-      <ApolloProvider client={client}>
         <App />
-      </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

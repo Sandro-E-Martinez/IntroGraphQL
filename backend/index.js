@@ -11,19 +11,6 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     // VERIFICAR TOKEN DEL HEADER DE AUTHORIZATION
-    context: ({req}) => {
-        const token = req.headers['authorization'] || '';
-        if(token) {
-            try {
-                const {id} = jwt.verify(token, process.env.SECRET );
-                return {
-                    id
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }
-    }
 });
 
 server.listen({ port: 4000 }).then( ({url}) => {

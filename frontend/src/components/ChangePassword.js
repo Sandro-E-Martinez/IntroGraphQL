@@ -13,20 +13,8 @@ import Loading from './Loading';
 import Modal from './Modal';
 
 // PREPARAMOS LA CONSULTA PARA OBTEBER LOS DATOS DEL USUARIO
-const QUERY_CURRENT_USER = gql`
-  {
-    currentUser {
-      name
-    }
-  }
-`;
 
 // PREPARAMOS LA MUTACIÓN PARA PARA CAMBIAR EL PASSWORD
-const QUERY_CHANGE_MY_PASSWORD = gql`
-  mutation ($newPassword: String!) {
-    changeMyPassword(newPassword: $newPassword)
-  }
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,43 +37,21 @@ const ChangePassword = ({onLogout}) => {
   const [message, setMessage] = useState(null);
 
   // REALIZAMOS LA CONSULTA DE LOS DATOS DEL USUARIO ACTUAL
-  const { data, loading: cuLoading, error: cuError } = useQuery(QUERY_CURRENT_USER);
 
   // PREPARAMOS LA MUTACIÓN PARA ACTUALIZAR LOS DATOS DEL USUARIO
-  const [changeMyPassword, { loading: cpLoading, error: cpError}] = useMutation(QUERY_CHANGE_MY_PASSWORD);
-
 
   const onSubmit = async ({password}) => {
     console.log('forma data', password);
 
     // UTILIZAMOS NUESTRO MÉTODO PARA CAMBIAR PASSWORD
-    try {
-      const { data } = await changeMyPassword({
-        variables: {
-          newPassword: password
-        }
-      });
-      setMessage(data.changeMyPassword);
-    } catch (error) {
-      console.error(error)
-    }
   }
-
 
   const classes = useStyles();
 
-  if (cuError || cpError) {
-    return (<Modal message={cuError ? cuError.message : cpError.message} />);
-  }else if(cpLoading || cuLoading) {
-    return (<Loading />);
-  }else {
     return (
       <Div100vh className={classes.root}>
         <Container maxWidth='sm' className={classes.container}>
           {/* Mostramos el nombre del usuario */}
-          {
-            data && <Typography variant='h3'>Bienvenido {data.currentUser.name}</Typography>
-          }
           <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
             <Typography variant="h5">Cambia tu password</Typography>
             <Controller
@@ -108,8 +74,6 @@ const ChangePassword = ({onLogout}) => {
         </Container>
       </Div100vh>
     )
-  }
-
 }
 
 export default ChangePassword

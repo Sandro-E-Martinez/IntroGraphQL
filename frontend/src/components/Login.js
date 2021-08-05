@@ -14,13 +14,6 @@ import Loading from './Loading';
 import Modal from './Modal';
 
 //DECLARAMOS EL MUTATUION PARA AUTENTICAR
-const AUTH_MUTATION = gql`
-  mutation ($input: AuthInput!) {
-    auth(input: $input) {
-      token
-    }
-  }
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,24 +43,12 @@ const Login = ({onAuth}) => {
   const { control, handleSubmit } = useForm();
 
   // PREPARAMOS LA LLAMADA DE LA MUTACION
-  const [auth, { loading, error}] = useMutation(AUTH_MUTATION);
 
   const onSubmit = async (formData) => {
     console.log('Datos del formulario',formData);
     // UTILIZAMOS LA MUTACIÓN "AUTH" EN EL SUBMIT DEL FORMULARIO
-    const {email,password} = formData;
-    try {
-      const { data } = await auth({
-        variables: {
-          input: { email, password }
-        }
-      });
-      onAuth(data.auth.token);
-    } catch (error) {
-      console.error(error)
-    }
   }
-  
+
   return (
     <Div100vh className={classes.root}>
       <Container maxWidth='xs' className={classes.container}>
@@ -97,8 +78,6 @@ const Login = ({onAuth}) => {
             <Button variant="contained" type="submit">Acceder</Button>
             </form>
             {/* DAMOS RETROALIMENTACIÓN AL USUARIO */}
-            {loading && <Loading />}
-            {error && <Modal message={error.message} />}
           </CardContent>
         </Card>
       </Container>
